@@ -4,6 +4,7 @@ using System.Numerics;
 using System.Threading.Tasks;
 using Windows.System.Diagnostics;
 using Windows.UI.Composition;
+using Windows.UI.Core;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Hosting;
@@ -15,10 +16,11 @@ namespace CompositionTest
         ContainerVisual visual;
         Compositor compositor;
         string drawTime;
+        int targetDrawCount = 0;
 
         static Random rnd = new Random();
         static int size = 6;
-        static int columnGrid = 99;
+        static int columnGrid = 100;
         Vector2 sizeVector = new Vector2(size);
 
         public MainPage()
@@ -43,6 +45,10 @@ namespace CompositionTest
         private async void Draw_Click(object sender, RoutedEventArgs e)
         {
             VisualStatus.Text = "Creating visuals...";
+            PercentRenderedBar.Value = 0;
+            targetDrawCount = columnGrid * columnGrid;
+            RenderedText.Text = $"Objects rendered: 0/{targetDrawCount}";
+
             await Task.Run(() =>
             {
                 visual.Children.RemoveAll();
@@ -63,12 +69,15 @@ namespace CompositionTest
                 }
 
                 drawTimeBench.Stop();
+
                 Debug.WriteLine("Visuals created in: " + drawTimeBench.Elapsed.ToString("mm\\:ss\\.fff"));
                 drawTime = drawTimeBench.Elapsed.ToString("mm\\:ss\\.fff");
             });
             ProcessMemoryUsageReport memoryUsageRun = ProcessDiagnosticInfo.GetForCurrentProcess().MemoryUsage.GetReport();
             MemoryUsage.Text = "Memory usage for draw (working set): " + (memoryUsageRun.WorkingSetSizeInBytes / 1024).ToString() + "kb";
             VisualStatus.Text = "Visuals created in: " + drawTime;
+            RenderedText.Text = $"Objects rendered: {targetDrawCount}/{targetDrawCount}";
+            PercentRenderedBar.Value = 100;
         }
 
         private void ObjectInput_TextChanged(object sender, TextChangedEventArgs e)
@@ -76,6 +85,8 @@ namespace CompositionTest
             try
             {
                 columnGrid = Convert.ToInt32(ObjectInput.Text);
+                targetDrawCount = columnGrid * columnGrid;
+                RenderedText.Text = $"Objects rendered: 0/{targetDrawCount}";
             }
             catch (Exception ex)
             {
@@ -94,6 +105,15 @@ namespace CompositionTest
             {
                 Debug.WriteLine(ex.ToString());
             }
+        }
+
+        private void ClearVisuals_Click(object sender, RoutedEventArgs e)
+        {
+            Draw.IsEnabled = false;
+            visual.Children.RemoveAll();
+            PercentRenderedBar.Value = 0;
+            RenderedText.Text = $"Objects rendered: 0/{targetDrawCount}";
+            Draw.IsEnabled = true;
         }
     }
 }

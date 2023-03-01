@@ -14,10 +14,17 @@
                 <Grid>
                     <StackPanel Orientation="Horizontal">
                         <Button x:Name="Draw" Content="Draw Composition sample" HorizontalAlignment="Center" VerticalAlignment="Center" Click="Draw_Click" Margin="10,0,0,0"/>
+                        <Button x:Name="ClearVisuals" Content="Clear visuals" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10,0,0,0" Click="ClearVisuals_Click"/>
                         <TextBox VerticalAlignment="Top" x:Name="ObjectInput" HorizontalAlignment="Center"  Width="250" Header="Vector draw size (VectorArea = input^2)" Margin="10,0,0,0" TextChanged="ObjectInput_TextChanged"/>
                         <TextBox VerticalAlignment="Top" x:Name="GridSizeInput" HorizontalAlignment="Center"  Width="250" Header="Grid Size" Margin="10,0,0,0" TextChanged="GridSizeInput_TextChanged"/>
-                        <TextBlock Text="Ready" x:Name="VisualStatus" HorizontalAlignment="Center" Margin="10,0,0,0" VerticalAlignment="Center"/>
-                        <TextBlock Text="Memory usage for draw (working set): 0kb" HorizontalAlignment="Center" Margin="10,0,0,0" VerticalAlignment="Center" x:Name="MemoryUsage"/>
+                        <StackPanel>
+                            <TextBlock Text="Ready" x:Name="VisualStatus" HorizontalAlignment="Left" Margin="10,0,0,2" VerticalAlignment="Top" FontSize="13"/>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="Objects rendered: 0/0" Margin="10,0,0,0" FontSize="13" x:Name="RenderedText"/>
+                                <ProgressBar Value="0" x:Name="PercentRenderedBar" Width="100" Margin="10,0,0,0"/>
+                            </StackPanel>
+                            <TextBlock Text="Memory usage for draw (working set): 0kb" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Center" x:Name="MemoryUsage" FontSize="13"/>
+                        </StackPanel>
                     </StackPanel>
                 </Grid>
             </StackPanel>
