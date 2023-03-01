@@ -36,6 +36,7 @@ namespace CompositionTest
             GridSizeInput.Text = 6.ToString();
             ProcessMemoryUsageReport memoryUsageLaunch = ProcessDiagnosticInfo.GetForCurrentProcess().MemoryUsage.GetReport();
             MemoryUsage.Text = "Memory usage for draw (working set): " + (memoryUsageLaunch.WorkingSetSizeInBytes / 1024).ToString() + "kb";
+            RenderedText.Text = "Objects rendered: 0/10000";
 
             compositor = Window.Current.Compositor;
             visual = compositor.CreateContainerVisual();
@@ -112,6 +113,7 @@ namespace CompositionTest
             Draw.IsEnabled = false;
             visual.Children.RemoveAll();
             PercentRenderedBar.Value = 0;
+            VisualStatus.Text = "Ready";
             RenderedText.Text = $"Objects rendered: 0/{targetDrawCount}";
             Draw.IsEnabled = true;
         }
